@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cron
+              image: centos:latest
+              command: [ "sh", "-c", "date > /output/date.txt && sleep 500" ]
+              volumeMounts:
+                - name: volcron
+                  mountPath: /output
+          volumes:
+            - name: volcron
+              hostPath:
+                path: /adhamk8s
+                type: Directory
+          restartPolicy: Never
